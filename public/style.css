@@ -1,0 +1,168 @@
+/* Yazı Tipleri */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+:root {
+  --light-bg: #f4f4f8;
+  --light-card: #ffffff;
+  --light-text: #1a1a1a;
+  --light-primary: #4fc3f7;
+  --light-accent: #81c784;
+
+  --dark-bg: #1e1e2f;
+  --dark-card: #2c2c3a;
+  --dark-text: #f0f0f0;
+  --dark-primary: #4fc3f7;
+  --dark-accent: #ffb74d;
+
+  --transition: all 0.4s ease;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--light-bg);
+  color: var(--light-text);
+  transition: var(--transition);
+}
+
+.dark-mode {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+a {
+  color: var(--light-primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.dark-mode a {
+  color: var(--dark-primary);
+}
+
+.navbar {
+  background: linear-gradient(to right, var(--light-primary), var(--light-accent));
+  transition: var(--transition);
+}
+
+.dark-mode .navbar {
+  background: linear-gradient(to right, var(--dark-primary), var(--dark-accent));
+}
+
+.nav-link {
+  color: white !important;
+  transition: var(--transition);
+}
+
+.nav-link:hover {
+  transform: scale(1.05);
+  color: #e0e0e0 !important;
+}
+
+section {
+  padding: 60px 0;
+}
+
+.card {
+  background-color: var(--light-card);
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.05);
+  transition: var(--transition);
+}
+
+.dark-mode .card {
+  background-color: var(--dark-card);
+  box-shadow: 0 0 25px rgba(0,0,0,0.3);
+}
+
+input, textarea {
+  border-radius: 10px !important;
+  border: 1px solid #ccc !important;
+  transition: var(--transition);
+}
+
+input:focus, textarea:focus {
+  border-color: var(--light-primary) !important;
+  box-shadow: 0 0 10px var(--light-primary);
+}
+
+.dark-mode input:focus, .dark-mode textarea:focus {
+  border-color: var(--dark-primary) !important;
+  box-shadow: 0 0 10px var(--dark-primary);
+}
+
+.btn {
+  transition: var(--transition);
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+#result, #qrResult {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--light-accent);
+  transition: var(--transition);
+}
+
+.dark-mode #result, 
+.dark-mode #qrResult {
+  color: var(--dark-accent);
+}
+
+.hidden {
+  display: none;
+}
+
+/* Tema geçiş düğmesi */
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--light-primary);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: var(--transition);
+  z-index: 9999;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+.dark-mode .theme-toggle {
+  background: var(--dark-accent);
+}
+
+/* Karanlık modda QR Kod ve Rapor bölümü arka planı siyah */
+.dark-mode #qrSection,
+.dark-mode #reportSection {
+  background-color: #1e1e2f !important;
+}
+
+/* Karanlık modda QR ve rapor başlık yazıları okunabilir olsun */
+.dark-mode #qrSection h3,
+.dark-mode #reportSection h3,
+.dark-mode #qrSection label,
+.dark-mode #reportSection label,
+.dark-mode #qrSection input,
+.dark-mode #reportSection input,
+.dark-mode #qrSection textarea,
+.dark-mode #reportSection textarea,
+.dark-mode #qrSection p,
+.dark-mode #reportSection p {
+  color: #f0f0f0 !important;
+}
+
+/* Karanlık modda buton metinleri net olsun */
+.dark-mode #qrSection button,
+.dark-mode #reportSection button {
+  color: #000 !important;
+}

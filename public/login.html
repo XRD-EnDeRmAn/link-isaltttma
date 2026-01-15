@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Giriş Yap</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .container {
+        background: #fff;
+        padding: 20px 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        max-width: 400px;
+      }
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      input,
+      button {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        background: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .message {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+      .message.error {
+        color: red;
+      }
+      .message.success {
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Giriş Yap</h2>
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="E-posta" required />
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Şifre"
+          required
+        />
+        <button type="submit">Giriş Yap</button>
+      </form>
+      <p id="loginMessage" class="message"></p>
+    </div>
+    <script>
+      const loginForm = document.getElementById("loginForm");
+      const loginMessage = document.getElementById("loginMessage");
+
+      loginForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+
+        const res = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await res.json();
+
+        if (data.error) {
+          loginMessage.innerText = data.error;
+          loginMessage.classList.remove("success");
+          loginMessage.classList.add("error");
+        } else {
+          loginMessage.innerText = data.message;
+          loginMessage.classList.remove("error");
+          loginMessage.classList.add("success");
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 1500);
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kayıt Ol</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .hidden {
+      display: none;
+    }
+    .message {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .message.success { color: green; }
+    .message.error { color: red; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Kayıt Ol</h2>
+    <form id="registerForm">
+      <input type="email" id="email" placeholder="E-posta" required>
+      <input type="password" id="password" placeholder="Şifre" required>
+      <button type="submit">Kayıt Ol</button>
+    </form>
+
+    <!-- Doğrulama Paneli (başlangıçta gizli) -->
+    <div id="verificationPanel" class="hidden">
+      <p id="infoText"></p>
+      <input type="text" id="verificationCode" placeholder="Doğrulama kodunu girin">
+      <button id="verifyBtn">Onayla</button>
+      <p id="verifyMessage" class="message"></p>
+    </div>
+  </div>
+
+  <script>
+    const registerForm = document.getElementById("registerForm");
+    const verificationPanel = document.getElementById("verificationPanel");
+    const infoText = document.getElementById("infoText");
+    const verifyBtn = document.getElementById("verifyBtn");
+    const verifyMessage = document.getElementById("verifyMessage");
+
+    registerForm.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      
+      if (data.error) {
+        alert("Kayıt Hatası: " + data.error);
+      } else {
+        // Kayıt başarılı ise, formu gizle ve doğrulama panelini göster
+        registerForm.classList.add("hidden");
+        verificationPanel.classList.remove("hidden");
+        infoText.innerText = `${email} adresine doğrulama kodu gönderildi.`;
+      }
+    });
+
+    verifyBtn.addEventListener("click", async function() {
+      const email = document.getElementById("email").value;
+      const code = document.getElementById("verificationCode").value;
+      const res = await fetch("/api/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, verificationCode: code })
+      });
+      const data = await res.json();
+      if (data.error) {
+        verifyMessage.innerText = data.error;
+        verifyMessage.classList.remove("success");
+        verifyMessage.classList.add("error");
+      } else {
+        verifyMessage.innerText = data.message;
+        verifyMessage.classList.remove("error");
+        verifyMessage.classList.add("success");
+        // Kayıt tamamlandıktan sonra 2 saniye sonra ana sayfaya yönlendir
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 2000);
+      }
+    });
+  </script>
+</body>
+</html>

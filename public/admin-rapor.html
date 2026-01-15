@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Rapor Paneli</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+  <div class="container mt-4">
+    <h1 class="mb-4">Admin Rapor Paneli</h1>
+    <p><a href="/admin123">Admin Paneline Dön</a></p>
+    <div id="reportTable"></div>
+  </div>
+  <script>
+    fetch('/api/reports')
+      .then(res => res.json())
+      .then(data => {
+        let html = `<table class="table table-bordered">
+                      <tr>
+                        <th>Rapor ID</th>
+                        <th>Kısaltılmış Link</th>
+                        <th>Rapor Tarihi</th>
+                        <th>İşlem</th>
+                      </tr>`;
+        data.forEach(report => {
+          html += `<tr>
+                    <td>${report.id}</td>
+                    <td><a href="${location.protocol}//${location.host}/${report.short}" target="_blank">${report.short}</a></td>
+                    <td>${new Date(report.created_at).toLocaleString()}</td>
+                    <td>
+                      <form method="POST" action="/api/delete" onsubmit="return confirm('Bu linki silmek istediğinize emin misiniz?');">
+                        <input type="hidden" name="short" value="${report.short}">
+                        <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                      </form>
+                    </td>
+                  </tr>`;
+        });
+        html += `</table>`;
+        document.getElementById('reportTable').innerHTML = html;
+      });
+  </script>
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
